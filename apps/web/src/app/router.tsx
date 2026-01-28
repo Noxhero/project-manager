@@ -10,6 +10,7 @@ const NewProjectPage = React.lazy(() => import("../pages/NewProjectPage"));
 const ProjectDetailPage = React.lazy(() => import("../pages/ProjectDetailPage"));
 const KanbanPage = React.lazy(() => import("../pages/KanbanPage"));
 const CalendarPage = React.lazy(() => import("../pages/CalendarPage"));
+const GraphPage = React.lazy(() => import("../pages/GraphPage"));
 const SearchPage = React.lazy(() => import("../pages/SearchPage"));
 const SettingsPage = React.lazy(() => import("../pages/SettingsPage"));
 
@@ -29,6 +30,7 @@ export const router = createBrowserRouter([
       { path: "projects/:projectId/kanban", element: <KanbanPage /> },
       { path: "tasks", element: <KanbanPage /> },
       { path: "calendar", element: <CalendarPage /> },
+      { path: "graph", element: <GraphPage /> },
       { path: "search", element: <SearchPage /> },
       { path: "settings", element: <SettingsPage /> }
     ]

@@ -9,6 +9,7 @@ const navItems = [
   { to: "/", label: "Dashboard" },
   { to: "/tasks", label: "Tâches" },
   { to: "/calendar", label: "Calendrier" },
+  { to: "/graph", label: "Graphes" },
   { to: "/search", label: "Recherche" },
   { to: "/settings", label: "Paramètres" }
 ];
