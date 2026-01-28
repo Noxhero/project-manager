@@ -11,7 +11,9 @@ export const authRouter = Router();
 
 const registerSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8)
+  password: z.string().min(8),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1)
 });
 
 authRouter.post("/register", async (req: Request, res: Response, next: NextFunction) => {
@@ -26,7 +28,9 @@ authRouter.post("/register", async (req: Request, res: Response, next: NextFunct
     const user = await prisma.user.create({
       data: {
         email: body.email,
-        password: hash
+        password: hash,
+        firstName: body.firstName,
+        lastName: body.lastName
       }
     });
 
@@ -36,7 +40,7 @@ authRouter.post("/register", async (req: Request, res: Response, next: NextFunct
       { expiresIn: "7d" }
     );
 
-    res.status(201).json({ token });
+    res.status(201).json({ token, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, role: user.role, createdAt: user.createdAt.toISOString(), updatedAt: user.updatedAt.toISOString() } });
   } catch (err) {
     next(err);
   }
@@ -63,7 +67,7 @@ authRouter.post("/login", async (req: Request, res: Response, next: NextFunction
       { expiresIn: "7d" }
     );
 
-    res.json({ token });
+    res.json({ token, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, role: user.role, createdAt: user.createdAt.toISOString(), updatedAt: user.updatedAt.toISOString() } });
   } catch (err) {
     next(err);
   }

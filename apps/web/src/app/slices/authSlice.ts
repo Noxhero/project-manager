@@ -19,20 +19,20 @@ const initialState: AuthSliceState = {
 export const login = createAsyncThunk(
   "auth/login",
   async ({ email, password }: { email: string; password: string }) => {
-    const res = await api.post<{ token: string }>("/auth/login", { email, password });
-    const token = res.data.token;
+    const res = await api.post<{ token: string; user: User }>("/auth/login", { email, password });
+    const { token, user } = res.data;
     localStorage.setItem("pm_token", token);
-    return token;
+    return { token, user };
   }
 );
 
 export const register = createAsyncThunk(
   "auth/register",
-  async ({ email, password }: { email: string; password: string }) => {
-    const res = await api.post<{ token: string }>("/auth/register", { email, password });
-    const token = res.data.token;
+  async ({ email, password, firstName, lastName }: { email: string; password: string; firstName: string; lastName: string }) => {
+    const res = await api.post<{ token: string; user: User }>("/auth/register", { email, password, firstName, lastName });
+    const { token, user } = res.data;
     localStorage.setItem("pm_token", token);
-    return token;
+    return { token, user };
   }
 );
 
@@ -59,7 +59,8 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -71,7 +72,8 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;

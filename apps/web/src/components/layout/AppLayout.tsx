@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 
 import { PageSkeleton } from "../ui/PageSkeleton";
+import { Chatbot } from "../chatbot/Chatbot";
 
 const navItems = [
   { to: "/", label: "Dashboard" },
@@ -90,6 +91,9 @@ export function AppLayout() {
       </nav>
 
       <div className="h-16 md:hidden" />
+      
+      {/* Chatbot */}
+      <Chatbot />
     </div>
   );
 }
