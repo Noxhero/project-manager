@@ -1,29 +1,35 @@
-import { Card } from "../components/ui/Card";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+
+import { KanbanBoard } from "../components/kanban/KanbanBoard";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { fetchTasksByProject } from "../app/slices/tasksSlice";
 
 export default function KanbanPage() {
+  const { projectId } = useParams<{ projectId: string }>();
+  const dispatch = useAppDispatch();
+  const { loading } = useAppSelector((s) => s.tasks);
+
+  useEffect(() => {
+    if (projectId) {
+      dispatch(fetchTasksByProject(projectId));
+    }
+  }, [dispatch, projectId]);
+
+  if (!projectId) return null;
+
   return (
     <div className="space-y-6 pb-20 md:pb-0">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight text-slate-50">Tâches</h1>
-        <p className="mt-1 text-sm text-slate-400">Kanban drag-and-drop (prochaine étape).</p>
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-50">Kanban</h1>
+        <p className="mt-1 text-sm text-slate-400">Glisse-dépose les tâches entre colonnes</p>
       </header>
 
-      <Card>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <div className="text-sm font-medium text-slate-50">À faire</div>
-            <div className="mt-3 h-40 rounded-xl border border-dashed border-white/15" />
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <div className="text-sm font-medium text-slate-50">En cours</div>
-            <div className="mt-3 h-40 rounded-xl border border-dashed border-white/15" />
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <div className="text-sm font-medium text-slate-50">Terminé</div>
-            <div className="mt-3 h-40 rounded-xl border border-dashed border-white/15" />
-          </div>
-        </div>
-      </Card>
+      {loading ? (
+        <div className="text-sm text-slate-400">Chargement...</div>
+      ) : (
+        <KanbanBoard projectId={projectId} />
+      )}
     </div>
   );
 }

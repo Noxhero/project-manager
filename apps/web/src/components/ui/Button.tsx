@@ -1,8 +1,14 @@
 import type { ButtonHTMLAttributes } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { clsx } from "clsx";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "ghost";
+};
+
+const variants = {
+  primary: "bg-blue-600 text-white hover:bg-blue-700",
+  ghost: "text-slate-200 hover:bg-white/10"
 };
 
 export function Button({ className, variant = "primary", ...props }: Props) {
@@ -11,17 +17,14 @@ export function Button({ className, variant = "primary", ...props }: Props) {
   const base =
     "inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium transition focus-visible:outline-none";
 
-  const styles =
-    variant === "primary"
-      ? "bg-indigo-500 text-white hover:bg-indigo-400 active:bg-indigo-600"
-      : "bg-white/0 text-slate-200 hover:bg-white/5";
-
   return (
     <motion.button
-      whileHover={reduceMotion ? undefined : { scale: 1.02 }}
-      whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-      className={[base, styles, className].filter(Boolean).join(" ")}
-      {...props}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      className={clsx(base, variants[variant], className)}
+      {...(props as any)}
+      onDragStart={undefined}
+      onDragEnd={undefined}
     />
   );
 }

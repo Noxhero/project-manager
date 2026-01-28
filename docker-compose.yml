@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: pm
       POSTGRES_DB: pm
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - pm_postgres_data:/var/lib/postgresql/data
 
@@ -17,7 +17,7 @@ services:
     image: mongo:7
     container_name: pm_mongo
     ports:
-      - "27017:27017"
+      - "27018:27017"
     volumes:
       - pm_mongo_data:/data/db
 
@@ -27,8 +27,8 @@ services:
     environment:
       NEO4J_AUTH: neo4j/password
     ports:
-      - "7474:7474"
-      - "7687:7687"
+      - "7475:7474"
+      - "7688:7687"
     volumes:
       - pm_neo4j_data:/data
 

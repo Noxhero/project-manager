@@ -8,6 +8,8 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
     "test": "mocha --timeout 20000 --extension ts --require tsx test/**/*.test.ts",
     "lint": "echo \"(lint placeholder)\""
   },

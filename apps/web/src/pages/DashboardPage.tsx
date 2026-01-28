@@ -1,9 +1,19 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { fetchProjects } from "../app/slices/projectsSlice";
 
 export default function DashboardPage() {
+  const dispatch = useAppDispatch();
+  const { items: projects, loading, error } = useAppSelector((s) => s.projects);
+
+  useEffect(() => {
+    dispatch(fetchProjects());
+  }, [dispatch]);
+
   return (
     <div className="space-y-6 pb-20 md:pb-0">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -46,14 +56,23 @@ export default function DashboardPage() {
             <Button variant="ghost">Trier</Button>
           </div>
           <div className="mt-4 space-y-3">
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-              <div className="text-sm font-medium text-slate-50">Exemple: Refonte Portfolio</div>
-              <div className="mt-1 text-xs text-slate-400">Deadline: — • Priorité: —</div>
-            </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-              <div className="text-sm font-medium text-slate-50">Exemple: App Mobile</div>
-              <div className="mt-1 text-xs text-slate-400">Deadline: — • Priorité: —</div>
-            </div>
+            {loading && <div className="text-sm text-slate-400">Chargement...</div>}
+            {error && <div className="text-sm text-red-400">{error}</div>}
+            {!loading && !error && projects.length === 0 && (
+              <div className="text-sm text-slate-400">Aucun projet pour le moment.</div>
+            )}
+            {!loading &&
+              !error &&
+              projects.map((p) => (
+                <Link key={p._id} to={`/projects/${p._id}`}>
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-4 hover:bg-white/10 transition">
+                    <div className="text-sm font-medium text-slate-50">{p.name}</div>
+                    <div className="mt-1 text-xs text-slate-400">
+                      Deadline: {p.deadline ? new Date(p.deadline).toLocaleDateString() : "—"} • Tags: {p.tags.join(", ") || "—"}
+                    </div>
+                  </div>
+                </Link>
+              ))}
           </div>
         </Card>
 
