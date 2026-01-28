@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: pm_postgres
+    environment:
+      POSTGRES_USER: pm
+      POSTGRES_PASSWORD: pm
+      POSTGRES_DB: pm
+    ports:
+      - "5432:5432"
+    volumes:
+      - pm_postgres_data:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:7
+    container_name: pm_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - pm_mongo_data:/data/db
+
+  neo4j:
+    image: neo4j:5
+    container_name: pm_neo4j
+    environment:
+      NEO4J_AUTH: neo4j/password
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - pm_neo4j_data:/data
+
+volumes:
+  pm_postgres_data:
+  pm_mongo_data:
+  pm_neo4j_data:
